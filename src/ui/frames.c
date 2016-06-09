@@ -2806,6 +2806,7 @@ get_control (MetaFrames *frames,
              int x, int y)
 {
   MetaFrameGeometry fgeom;
+  MetaFrameBorders borders;
   MetaFrameFlags flags;
   gboolean has_vert, has_horiz;
   GdkRectangle client;
@@ -2817,6 +2818,13 @@ get_control (MetaFrames *frames,
   scale = gdk_window_get_scale_factor (frame->window);
   x /= scale;
   y /= scale;
+
+  borders = fgeom.borders;
+  if (x < borders.invisible.left - borders.resize.left ||
+      y < borders.invisible.top - borders.resize.top ||
+      x > fgeom.width - borders.invisible.right + borders.resize.right ||
+      y > fgeom.height - borders.invisible.bottom + borders.resize.bottom)
+    return META_FRAME_CONTROL_NONE;
 
   if (POINT_IN_RECT (x, y, client))
     return META_FRAME_CONTROL_CLIENT_AREA;
