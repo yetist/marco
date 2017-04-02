@@ -40,6 +40,9 @@ struct _MetaUI {
 	Screen* xscreen;
 	MetaFrames* frames;
 
+	gint scale;
+	gdouble dpi;
+
 	/* For double-click tracking */
 	guint button_click_number;
 	Window button_click_window;
@@ -47,6 +50,67 @@ struct _MetaUI {
 	int button_click_y;
 	guint32 button_click_time;
 };
+
+static gboolean
+get_int_setting (const gchar *name,
+                 gint        *value)
+{
+  GValue gvalue = G_VALUE_INIT;
+
+  g_value_init (&gvalue, G_TYPE_INT);
+
+  if (gdk_screen_get_setting (gdk_screen_get_default (), name, &gvalue))
+    {
+      *value = g_value_get_int (&gvalue);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gint
+get_window_scaling_factor (MetaUI *ui)
+{
+  gint scale;
+
+  if (get_int_setting ("gdk-window-scaling-factor", &scale))
+    return scale;
+
+  return 1;
+}
+
+static gdouble
+get_xft_dpi (MetaUI *ui)
+{
+  const gchar *dpi_scale_env;
+  gint xft_dpi;
+  gdouble dpi;
+
+  dpi = 96.0;
+  if (get_int_setting ("gtk-xft-dpi", &xft_dpi) && xft_dpi > 0)
+    dpi = xft_dpi / 1024.0 / ui->scale;
+
+  dpi_scale_env = g_getenv ("GDK_DPI_SCALE");
+  if (dpi_scale_env != NULL)
+    {
+      gdouble dpi_scale;
+
+      dpi_scale = g_ascii_strtod (dpi_scale_env, NULL);
+      if (dpi_scale != 0)
+        dpi *= dpi_scale;
+    }
+
+  return dpi;
+}
+
+static void
+notify_gtk_xft_dpi_cb (GtkSettings *settings,
+                       GParamSpec  *pspec,
+                       MetaUI      *ui)
+{
+  ui->scale = get_window_scaling_factor (ui);
+  ui->dpi = get_xft_dpi (ui);
+}
 
 void meta_ui_init(int* argc, char*** argv)
 {
@@ -265,6 +329,12 @@ meta_ui_new (Display *xdisplay,
   ui = g_new0 (MetaUI, 1);
   ui->xdisplay = xdisplay;
   ui->xscreen = screen;
+
+  ui->scale = get_window_scaling_factor (ui);
+  ui->dpi = get_xft_dpi (ui);
+
+  g_signal_connect (gtk_settings_get_default (), "notify::gtk-xft-dpi",
+                    G_CALLBACK (notify_gtk_xft_dpi_cb), ui);
 
   gdisplay = gdk_x11_lookup_xdisplay (xdisplay);
   g_assert (gdisplay == gdk_display_get_default ());
