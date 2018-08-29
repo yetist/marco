@@ -3032,6 +3032,8 @@ meta_window_unmake_fullscreen (MetaWindow  *window)
                                target_rect.width,
                                target_rect.height);
 
+      meta_window_queue(window, META_QUEUE_MOVE_RESIZE);
+
       /* Make sure user_rect is current.
        */
       force_save_user_window_placement (window);
