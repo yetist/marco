@@ -431,20 +431,30 @@ meta_frame_layout_get_borders (const MetaFrameLayout *layout,
   borders->visible.right = layout->right_width;
   borders->visible.bottom = layout->bottom_height;
 
+  borders->shadow.top = 0;
+  borders->shadow.left = 0;
+  borders->shadow.right = 0;
+  borders->shadow.bottom = 0;
+
   if (flags & META_FRAME_ALLOWS_HORIZONTAL_RESIZE)
     {
-      borders->invisible.left = layout->invisible_border.left;
-      borders->invisible.right = layout->invisible_border.right;
+      borders->resize.left = layout->invisible_border.left;
+      borders->resize.right = layout->invisible_border.right;
     }
 
   if (flags & META_FRAME_ALLOWS_VERTICAL_RESIZE)
     {
-      borders->invisible.bottom = layout->invisible_border.bottom;
-      borders->invisible.top = layout->invisible_border.top;
+      borders->resize.bottom = layout->invisible_border.bottom;
+      borders->resize.top = layout->invisible_border.top;
     }
 
   if (flags & META_FRAME_SHADED)
     borders->visible.bottom = borders->invisible.bottom = 0;
+
+  borders->invisible.left = MAX (borders->shadow.left, borders->resize.left);
+  borders->invisible.right = MAX (borders->shadow.right, borders->resize.right);
+  borders->invisible.bottom = MAX (borders->shadow.bottom, borders->resize.bottom);
+  borders->invisible.top = MAX (borders->shadow.top, borders->resize.top);
 
   borders->total.left = borders->invisible.left + borders->visible.left;
   borders->total.right = borders->invisible.right + borders->visible.right;

@@ -308,15 +308,14 @@ struct _MetaFrameBorders
    * and an outer portion that is invisible but responds to events.
    */
   GtkBorder visible;
+  GtkBorder shadow;
+  GtkBorder resize;
   GtkBorder invisible;
-
-  /* For convenience, we have a "total" border which is equal to the sum
-   * of the two borders above. */
   GtkBorder total;
 };
 
 /* sets all dimensions to zero */
-void meta_frame_borders_clear (MetaFrameBorders *self);
+void meta_frame_borders_clear (MetaFrameBorders *borders);
 
 /* should investigate changing these to whatever most apps use */
 #define META_ICON_WIDTH 32
