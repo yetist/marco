@@ -690,10 +690,9 @@ meta_frames_lookup_window (MetaFrames *frames,
 }
 
 void
-meta_frames_get_geometry (MetaFrames *frames,
-                          Window xwindow,
-                          int *top_height, int *bottom_height,
-                          int *left_width, int *right_width)
+meta_frames_get_borders (MetaFrames *frames,
+                         Window xwindow,
+                         MetaFrameBorders *borders)
 {
   MetaFrameFlags flags;
   MetaUIFrame *frame;
@@ -724,14 +723,13 @@ meta_frames_get_geometry (MetaFrames *frames,
                                 type,
                                 frame->text_height,
                                 flags,
-                                top_height, bottom_height,
-                                left_width, right_width);
+                                borders);
 
-  /* Scale frame geometry to ensure proper frame position */
-  *top_height *= scale;
-  *bottom_height *= scale;
-  *left_width *= scale;
-  *right_width *= scale;
+  /* Scale borders to ensure proper frame position */
+  borders->visible.top *= scale;
+  borders->visible.bottom *= scale;
+  borders->visible.left *= scale;
+  borders->visible.right *= scale;
 }
 
 void
@@ -2133,6 +2131,7 @@ populate_cache (MetaFrames *frames,
                 MetaUIFrame *frame)
 {
   int top, bottom, left, right;
+  MetaFrameBorders borders;
   int width, height;
   int frame_width, frame_height, screen_width, screen_height;
   gint scale;
@@ -2163,7 +2162,12 @@ populate_cache (MetaFrames *frames,
                                 frame_type,
                                 frame->text_height,
                                 frame_flags,
-                                &top, &bottom, &left, &right);
+                                &borders);
+
+  top = borders.visible.top;
+  left = borders.visible.left;
+  right = borders.visible.right;
+  bottom = borders.visible.bottom;
 
   pixels = get_cache (frames, frame);
   scale = gdk_window_get_scale_factor (frame->window);
@@ -2237,6 +2241,41 @@ clip_to_screen (cairo_region_t *region, MetaUIFrame *frame)
 }
 
 static void
+subtract_client_area (cairo_region_t *region, MetaUIFrame *frame)
+{
+  cairo_rectangle_int_t area;
+  MetaFrameFlags flags;
+  MetaFrameType type;
+  MetaFrameBorders borders;
+  cairo_region_t *tmp_region;
+  Display *display;
+  gint scale;
+
+  display = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
+  scale = gdk_window_get_scale_factor (frame->window);
+
+  meta_core_get (display, frame->xwindow,
+                 META_CORE_GET_FRAME_FLAGS, &flags,
+                 META_CORE_GET_FRAME_TYPE, &type,
+                 META_CORE_GET_CLIENT_WIDTH, &area.width,
+                 META_CORE_GET_CLIENT_HEIGHT, &area.height,
+                 META_CORE_GET_END);
+
+  meta_theme_get_frame_borders (meta_theme_get_current (),
+                                type, frame->text_height, flags,
+                                &borders);
+
+  area.width /= scale;
+  area.height /= scale;
+  area.x = borders.visible.left / scale;
+  area.y = borders.visible.top / scale;
+
+  tmp_region = cairo_region_create_rectangle (&area);
+  cairo_region_subtract (region, tmp_region);
+  cairo_region_destroy (tmp_region);
+}
+
+static void
 cached_pixels_draw (CachedPixels   *pixels,
                     cairo_t        *cr,
                     cairo_region_t *region)
@@ -2260,40 +2299,6 @@ cached_pixels_draw (CachedPixels   *pixels,
           cairo_region_destroy (region_piece);
         }
     }
-}
-
-static void
-subtract_client_area (cairo_region_t *region, MetaUIFrame *frame)
-{
-  GdkRectangle area;
-  MetaFrameFlags flags;
-  MetaFrameType type;
-  cairo_region_t *tmp_region;
-  Display *display;
-  gint scale;
-
-  display = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
-  scale = gdk_window_get_scale_factor (frame->window);
-
-  meta_core_get (display, frame->xwindow,
-                 META_CORE_GET_FRAME_FLAGS, &flags,
-                 META_CORE_GET_FRAME_TYPE, &type,
-                 META_CORE_GET_CLIENT_WIDTH, &area.width,
-                 META_CORE_GET_CLIENT_HEIGHT, &area.height,
-                 META_CORE_GET_END);
-
-  meta_theme_get_frame_borders (meta_theme_get_current (),
-                         type, frame->text_height, flags,
-                         &area.x, NULL, &area.y, NULL);
-
-  area.width /= scale;
-  area.height /= scale;
-  area.x /= scale;
-  area.y /= scale;
-
-  tmp_region = cairo_region_create_rectangle (&area);
-  cairo_region_subtract (region, tmp_region);
-  cairo_region_destroy (tmp_region);
 }
 
 static gboolean
