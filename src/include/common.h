@@ -316,6 +316,10 @@ struct _MetaFrameBorders
 
 /* sets all dimensions to zero */
 void meta_frame_borders_clear (MetaFrameBorders *borders);
+void scale_border (GtkBorder *border, double factor);
+
+gboolean get_int_setting (const gchar *name, gint *value);
+gint get_window_scaling_factor (void);
 
 /* should investigate changing these to whatever most apps use */
 #define META_ICON_WIDTH 32

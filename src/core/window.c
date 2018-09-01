@@ -8174,7 +8174,11 @@ meta_window_refresh_resize_popup (MetaWindow *window)
 
   if (window->display->grab_resize_popup == NULL)
     {
-      gint scale = gdk_window_get_scale_factor (gdk_get_default_root_window ());
+      /* TODO: We could simplify this if we assume that an app will never report 2x2 size
+       * increment in a LoDPI display, and thus default to checking for 2x2 for either LoDPI
+       * or HiDPI.
+       */
+      gint scale = get_window_scaling_factor ();
       /* Display the resize popup only for windows that report an
        * increment hint that's larger than the scale factor. */
       if (window->size_hints.width_inc > scale ||

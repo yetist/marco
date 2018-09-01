@@ -51,34 +51,6 @@ struct _MetaUI {
 	guint32 button_click_time;
 };
 
-static gboolean
-get_int_setting (const gchar *name,
-                 gint        *value)
-{
-  GValue gvalue = G_VALUE_INIT;
-
-  g_value_init (&gvalue, G_TYPE_INT);
-
-  if (gdk_screen_get_setting (gdk_screen_get_default (), name, &gvalue))
-    {
-      *value = g_value_get_int (&gvalue);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gint
-get_window_scaling_factor (MetaUI *ui)
-{
-  gint scale;
-
-  if (get_int_setting ("gdk-window-scaling-factor", &scale))
-    return scale;
-
-  return 1;
-}
-
 static gdouble
 get_xft_dpi (MetaUI *ui)
 {
@@ -108,7 +80,7 @@ notify_gtk_xft_dpi_cb (GtkSettings *settings,
                        GParamSpec  *pspec,
                        MetaUI      *ui)
 {
-  ui->scale = get_window_scaling_factor (ui);
+  ui->scale = get_window_scaling_factor ();
   ui->dpi = get_xft_dpi (ui);
 }
 
@@ -330,7 +302,7 @@ meta_ui_new (Display *xdisplay,
   ui->xdisplay = xdisplay;
   ui->xscreen = screen;
 
-  ui->scale = get_window_scaling_factor (ui);
+  ui->scale = get_window_scaling_factor ();
   ui->dpi = get_xft_dpi (ui);
 
   g_signal_connect (gtk_settings_get_default (), "notify::gtk-xft-dpi",

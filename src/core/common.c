@@ -42,3 +42,40 @@ meta_frame_borders_clear (MetaFrameBorders *borders)
   clear_border (&borders->invisible);
   clear_border (&borders->total);
 }
+
+void
+scale_border (GtkBorder *border, double factor)
+{
+  border->left *= factor;
+  border->right *= factor;
+  border->top *= factor;
+  border->bottom *= factor;
+}
+
+gboolean
+get_int_setting (const gchar *name,
+                 gint        *value)
+{
+  GValue gvalue = G_VALUE_INIT;
+
+  g_value_init (&gvalue, G_TYPE_INT);
+
+  if (gdk_screen_get_setting (gdk_screen_get_default (), name, &gvalue))
+    {
+      *value = g_value_get_int (&gvalue);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gint
+get_window_scaling_factor (void)
+{
+  gint scale;
+
+  if (get_int_setting ("gdk-window-scaling-factor", &scale))
+    return scale;
+
+  return 1;
+}
