@@ -1,0 +1,248 @@
+<html>
+<head>
+<title>rootdir - scan-build results</title>
+<link type="text/css" rel="stylesheet" href="scanview.css"/>
+<script src="sorttable.js"></script>
+<script language='javascript' type="text/javascript">
+function SetDisplay(RowClass, DisplayVal)
+{
+  var Rows = document.getElementsByTagName("tr");
+  for ( var i = 0 ; i < Rows.length; ++i ) {
+    if (Rows[i].className == RowClass) {
+      Rows[i].style.display = DisplayVal;
+    }
+  }
+}
+
+function CopyCheckedStateToCheckButtons(SummaryCheckButton) {
+  var Inputs = document.getElementsByTagName("input");
+  for ( var i = 0 ; i < Inputs.length; ++i ) {
+    if (Inputs[i].type == "checkbox") {
+      if(Inputs[i] != SummaryCheckButton) {
+        Inputs[i].checked = SummaryCheckButton.checked;
+        Inputs[i].onclick();
+      }
+    }
+  }
+}
+
+function returnObjById( id ) {
+    if (document.getElementById)
+        var returnVar = document.getElementById(id);
+    else if (document.all)
+        var returnVar = document.all[id];
+    else if (document.layers)
+        var returnVar = document.layers[id];
+    return returnVar;
+}
+
+var NumUnchecked = 0;
+
+function ToggleDisplay(CheckButton, ClassName) {
+  if (CheckButton.checked) {
+    SetDisplay(ClassName, "");
+    if (--NumUnchecked == 0) {
+      returnObjById("AllBugsCheck").checked = true;
+    }
+  }
+  else {
+    SetDisplay(ClassName, "none");
+    NumUnchecked++;
+    returnObjById("AllBugsCheck").checked = false;
+  }
+}
+</script>
+<!-- SUMMARYENDHEAD -->
+</head>
+<body>
+<h1>rootdir - scan-build results</h1>
+
+<table>
+<tr><th>User:</th><td>root@74c6480e3794</td></tr>
+<tr><th>Working Directory:</th><td>/rootdir</td></tr>
+<tr><th>Command Line:</th><td>make</td></tr>
+<tr><th>Clang Version:</th><td>clang version 7.0.1 (Fedora 7.0.1-2.fc29)
+</td></tr>
+<tr><th>Date:</th><td>Fri Feb 22 08:42:12 2019</td></tr>
+</table>
+<h2>Bug Summary</h2><table>
+<thead><tr><td>Bug Type</td><td>Quantity</td><td class="sorttable_nosort">Display?</td></tr></thead>
+<tr style="font-weight:bold"><td class="SUMM_DESC">All Bugs</td><td class="Q">48</td><td><center><input type="checkbox" id="AllBugsCheck" onClick="CopyCheckedStateToCheckButtons(this);" checked/></center></td></tr>
+<tr><th>Dead store</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Dead assignment</td><td class="Q">23</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_dead_store_dead_assignment');" checked/></center></td></tr>
+<tr><th>Logic error</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Branch condition evaluates to a garbage value</td><td class="Q">1</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_branch_condition_evaluates_to_a_garbage_value');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Cast from non-struct type to struct type</td><td class="Q">3</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_cast_from_non-struct_type_to_struct_type');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Cast region with wrong size</td><td class="Q">4</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_cast_region_with_wrong_size');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Dereference of null pointer</td><td class="Q">2</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_dereference_of_null_pointer');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Out-of-bound access</td><td class="Q">3</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_out-of-bound_access');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Result of operation is garbage or undefined</td><td class="Q">3</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_result_of_operation_is_garbage_or_undefined');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Use fixed address</td><td class="Q">1</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_logic_error_use_fixed_address');" checked/></center></td></tr>
+<tr><th>Memory error</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Memory leak</td><td class="Q">1</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_memory_error_memory_leak');" checked/></center></td></tr>
+<tr><td class="SUMM_DESC">Use-after-free</td><td class="Q">3</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_memory_error_use-after-free');" checked/></center></td></tr>
+<tr><th>Security</th><th colspan=2></th></tr>
+<tr><td class="SUMM_DESC">Potential insecure memory buffer bounds restriction in call 'strcpy'</td><td class="Q">4</td><td><center><input type="checkbox" onClick="ToggleDisplay(this,'bt_security_potential_insecure_memory_buffer_bounds_restriction_in_call_strcpy_');" checked/></center></td></tr>
+</table>
+<h2>Reports</h2>
+
+<table class="sortable" style="table-layout:automatic">
+<thead><tr>
+  <td>Bug Group</td>
+  <td class="sorttable_sorted">Bug Type<span id="sorttable_sortfwdind">&nbsp;&#x25BE;</span></td>
+  <td>File</td>
+  <td>Function/Method</td>
+  <td class="Q">Line</td>
+  <td class="Q">Path Length</td>
+  <td class="sorttable_nosort"></td>
+  <!-- REPORTBUGCOL -->
+</tr></thead>
+<tbody>
+<tr class="bt_logic_error_branch_condition_evaluates_to_a_garbage_value"><td class="DESC">Logic error</td><td class="DESC">Branch condition evaluates to a garbage value</td><td>core/window-props.c</td><td class="DESC">meta_display_init_window_prop_hooks</td><td class="Q">1591</td><td class="Q">2</td><td><a href="report-c0a147.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-c0a147.html" -->
+</tr>
+<tr class="bt_logic_error_cast_from_non-struct_type_to_struct_type"><td class="DESC">Logic error</td><td class="DESC">Cast from non-struct type to struct type</td><td>core/async-getprop.c</td><td class="DESC">async_get_property_handler</td><td class="Q">277</td><td class="Q">1</td><td><a href="report-63f5ec.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-63f5ec.html" -->
+</tr>
+<tr class="bt_logic_error_cast_from_non-struct_type_to_struct_type"><td class="DESC">Logic error</td><td class="DESC">Cast from non-struct type to struct type</td><td>core/xprops.c</td><td class="DESC">size_hints_from_results</td><td class="Q">883</td><td class="Q">1</td><td><a href="report-6480f1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6480f1.html" -->
+</tr>
+<tr class="bt_logic_error_cast_from_non-struct_type_to_struct_type"><td class="DESC">Logic error</td><td class="DESC">Cast from non-struct type to struct type</td><td>core/xprops.c</td><td class="DESC">wm_hints_from_results</td><td class="Q">761</td><td class="Q">1</td><td><a href="report-1dfdb1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1dfdb1.html" -->
+</tr>
+<tr class="bt_logic_error_cast_region_with_wrong_size"><td class="DESC">Logic error</td><td class="DESC">Cast region with wrong size</td><td>ui/theme.c</td><td class="DESC">meta_draw_op_new</td><td class="Q">2984</td><td class="Q">3</td><td><a href="report-def325.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-def325.html" -->
+</tr>
+<tr class="bt_logic_error_cast_region_with_wrong_size"><td class="DESC">Logic error</td><td class="DESC">Cast region with wrong size</td><td>ui/theme.c</td><td class="DESC">meta_color_spec_new</td><td class="Q">1130</td><td class="Q">4</td><td><a href="report-f6beef.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f6beef.html" -->
+</tr>
+<tr class="bt_logic_error_cast_region_with_wrong_size"><td class="DESC">Logic error</td><td class="DESC">Cast region with wrong size</td><td>ui/theme.c</td><td class="DESC">meta_draw_op_new</td><td class="Q">2984</td><td class="Q">3</td><td><a href="report-2cb6f3.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-2cb6f3.html" -->
+</tr>
+<tr class="bt_logic_error_cast_region_with_wrong_size"><td class="DESC">Logic error</td><td class="DESC">Cast region with wrong size</td><td>ui/theme.c</td><td class="DESC">meta_color_spec_new</td><td class="Q">1130</td><td class="Q">4</td><td><a href="report-709611.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-709611.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/theme.c</td><td class="DESC">meta_frame_layout_calc_geometry</td><td class="Q">671</td><td class="Q">1</td><td><a href="report-ba83c1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ba83c1.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/screen.c</td><td class="DESC">meta_screen_calc_workspace_layout</td><td class="Q">2172</td><td class="Q">1</td><td><a href="report-57861a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-57861a.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/preview-widget.c</td><td class="DESC">meta_preview_draw</td><td class="Q">236</td><td class="Q">1</td><td><a href="report-deb662.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-deb662.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>wm-tester/test-size-hints.c</td><td class="DESC">main</td><td class="Q">92</td><td class="Q">1</td><td><a href="report-8edc23.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-8edc23.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/window.c</td><td class="DESC">meta_window_move_resize_internal</td><td class="Q">3603</td><td class="Q">1</td><td><a href="report-0d3788.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-0d3788.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/session.c</td><td class="DESC">save_state</td><td class="Q">884</td><td class="Q">1</td><td><a href="report-d2abfc.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-d2abfc.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/boxes.c</td><td class="DESC">meta_rectangle_get_minimal_spanning_set_for_region</td><td class="Q">580</td><td class="Q">1</td><td><a href="report-be015c.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-be015c.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/boxes.c</td><td class="DESC">meta_rectangle_get_minimal_spanning_set_for_region</td><td class="Q">580</td><td class="Q">1</td><td><a href="report-36b7fd.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-36b7fd.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/preview-widget.c</td><td class="DESC">meta_preview_draw</td><td class="Q">236</td><td class="Q">1</td><td><a href="report-bdf78b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-bdf78b.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/frames.c</td><td class="DESC">meta_frames_button_press_event</td><td class="Q">1583</td><td class="Q">1</td><td><a href="report-b4e341.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-b4e341.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/edge-resistance.c</td><td class="DESC">apply_edge_resistance</td><td class="Q">464</td><td class="Q">1</td><td><a href="report-15a593.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-15a593.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/theme.c</td><td class="DESC">meta_frame_layout_calc_geometry</td><td class="Q">672</td><td class="Q">1</td><td><a href="report-a95828.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-a95828.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/edge-resistance.c</td><td class="DESC">find_nearest_position</td><td class="Q">204</td><td class="Q">1</td><td><a href="report-cd51e8.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-cd51e8.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>wm-tester/test-resizing.c</td><td class="DESC">main</td><td class="Q">139</td><td class="Q">1</td><td><a href="report-edecf4.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-edecf4.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/window.c</td><td class="DESC">meta_window_move_resize_internal</td><td class="Q">3602</td><td class="Q">1</td><td><a href="report-ab5e60.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ab5e60.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/keybindings.c</td><td class="DESC">handle_panel</td><td class="Q">2877</td><td class="Q">1</td><td><a href="report-10c7ab.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-10c7ab.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>wm-tester/test-size-hints.c</td><td class="DESC">main</td><td class="Q">91</td><td class="Q">1</td><td><a href="report-bb2435.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-bb2435.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/edge-resistance.c</td><td class="DESC">find_nearest_position</td><td class="Q">288</td><td class="Q">1</td><td><a href="report-6a124b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6a124b.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>core/screen.c</td><td class="DESC">meta_screen_calc_workspace_layout</td><td class="Q">2171</td><td class="Q">1</td><td><a href="report-5559bb.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-5559bb.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/frames.c</td><td class="DESC">meta_frames_button_press_event</td><td class="Q">1496</td><td class="Q">1</td><td><a href="report-994f6f.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-994f6f.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>wm-tester/test-resizing.c</td><td class="DESC">main</td><td class="Q">138</td><td class="Q">1</td><td><a href="report-d28417.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-d28417.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/theme.c</td><td class="DESC">meta_frame_layout_calc_geometry</td><td class="Q">672</td><td class="Q">1</td><td><a href="report-e3252f.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-e3252f.html" -->
+</tr>
+<tr class="bt_dead_store_dead_assignment"><td class="DESC">Dead store</td><td class="DESC">Dead assignment</td><td>ui/theme.c</td><td class="DESC">meta_frame_layout_calc_geometry</td><td class="Q">671</td><td class="Q">1</td><td><a href="report-defc03.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-defc03.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>core/window.c</td><td class="DESC">idle_calc_showing</td><td class="Q">1639</td><td class="Q">4</td><td><a href="report-724297.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-724297.html" -->
+</tr>
+<tr class="bt_logic_error_dereference_of_null_pointer"><td class="DESC">Logic error</td><td class="DESC">Dereference of null pointer</td><td>core/keybindings.c</td><td class="DESC">process_event</td><td class="Q">1257</td><td class="Q">25</td><td><a href="report-ffacc1.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ffacc1.html" -->
+</tr>
+<tr class="bt_memory_error_memory_leak"><td class="DESC">Memory error</td><td class="DESC">Memory leak</td><td>compositor/compositor-xrender.c</td><td class="DESC">make_shadow</td><td class="Q">587</td><td class="Q">37</td><td><a href="report-3f9fd9.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-3f9fd9.html" -->
+</tr>
+<tr class="bt_logic_error_out-of-bound_access"><td class="DESC">Logic error</td><td class="DESC">Out-of-bound access</td><td>core/async-getprop.c</td><td class="DESC">async_get_property_handler</td><td class="Q">448</td><td class="Q">12</td><td><a href="report-e1fc31.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-e1fc31.html" -->
+</tr>
+<tr class="bt_logic_error_out-of-bound_access"><td class="DESC">Logic error</td><td class="DESC">Out-of-bound access</td><td>core/xprops.c</td><td class="DESC">utf8_list_from_results</td><td class="Q">474</td><td class="Q">22</td><td><a href="report-641c46.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-641c46.html" -->
+</tr>
+<tr class="bt_logic_error_out-of-bound_access"><td class="DESC">Logic error</td><td class="DESC">Out-of-bound access</td><td>core/async-getprop.c</td><td class="DESC">async_get_property_handler</td><td class="Q">385</td><td class="Q">13</td><td><a href="report-a140e2.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-a140e2.html" -->
+</tr>
+<tr class="bt_security_potential_insecure_memory_buffer_bounds_restriction_in_call_strcpy_"><td class="DESC">Security</td><td class="DESC">Potential insecure memory buffer bounds restriction in call 'strcpy'</td><td>core/testasyncgetprop.c</td><td class="DESC">my_strdup</td><td class="Q">141</td><td class="Q">1</td><td><a href="report-f08210.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-f08210.html" -->
+</tr>
+<tr class="bt_security_potential_insecure_memory_buffer_bounds_restriction_in_call_strcpy_"><td class="DESC">Security</td><td class="DESC">Potential insecure memory buffer bounds restriction in call 'strcpy'</td><td>core/xprops.c</td><td class="DESC">meta_prop_get_values</td><td class="Q">1136</td><td class="Q">1</td><td><a href="report-e55019.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-e55019.html" -->
+</tr>
+<tr class="bt_security_potential_insecure_memory_buffer_bounds_restriction_in_call_strcpy_"><td class="DESC">Security</td><td class="DESC">Potential insecure memory buffer bounds restriction in call 'strcpy'</td><td>core/xprops.c</td><td class="DESC">class_hint_from_results</td><td class="Q">840</td><td class="Q">1</td><td><a href="report-ef9819.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ef9819.html" -->
+</tr>
+<tr class="bt_security_potential_insecure_memory_buffer_bounds_restriction_in_call_strcpy_"><td class="DESC">Security</td><td class="DESC">Potential insecure memory buffer bounds restriction in call 'strcpy'</td><td>core/xprops.c</td><td class="DESC">class_hint_from_results</td><td class="Q">824</td><td class="Q">1</td><td><a href="report-1cb642.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-1cb642.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>core/prefs.c</td><td class="DESC">button_layout_equal</td><td class="Q">1249</td><td class="Q">7</td><td><a href="report-ffa1fa.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-ffa1fa.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>core/window.c</td><td class="DESC">meta_window_move_resize_internal</td><td class="Q">3580</td><td class="Q">14</td><td><a href="report-6d3b20.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-6d3b20.html" -->
+</tr>
+<tr class="bt_logic_error_result_of_operation_is_garbage_or_undefined"><td class="DESC">Logic error</td><td class="DESC">Result of operation is garbage or undefined</td><td>core/prefs.c</td><td class="DESC">button_layout_handler</td><td class="Q">1457</td><td class="Q">5</td><td><a href="report-68796a.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-68796a.html" -->
+</tr>
+<tr class="bt_logic_error_use_fixed_address"><td class="DESC">Logic error</td><td class="DESC">Use fixed address</td><td>core/main.c</td><td class="DESC">main</td><td class="Q">422</td><td class="Q">3</td><td><a href="report-24807c.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-24807c.html" -->
+</tr>
+<tr class="bt_memory_error_use-after-free"><td class="DESC">Memory error</td><td class="DESC">Use-after-free</td><td>core/boxes.c</td><td class="DESC">merge_spanning_rects_in_region</td><td class="Q">412</td><td class="Q">13</td><td><a href="report-49266b.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-49266b.html" -->
+</tr>
+<tr class="bt_memory_error_use-after-free"><td class="DESC">Memory error</td><td class="DESC">Use-after-free</td><td>core/boxes.c</td><td class="DESC">merge_spanning_rects_in_region</td><td class="Q">412</td><td class="Q">13</td><td><a href="report-218076.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-218076.html" -->
+</tr>
+<tr class="bt_memory_error_use-after-free"><td class="DESC">Memory error</td><td class="DESC">Use-after-free</td><td>core/screen.c</td><td class="DESC">list_windows</td><td class="Q">754</td><td class="Q">10</td><td><a href="report-c38bd6.html#EndPath">View Report</a></td>
+<!-- REPORTBUG id="report-c38bd6.html" -->
+</tr>
+</tbody>
+</table>
+
+</body></html>
